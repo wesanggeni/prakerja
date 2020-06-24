@@ -15,11 +15,13 @@ Route::post('get-login', 'AuthController@login');
 
 Route::get('pekerjaan', 'Frontend\DefaultController@job');
 
+/*
 Route::group(['middleware' => 'sentinelmember'], function(){
   Route::group(['prefix' => 'status'], function() {
     Route::get('create', 'Frontend\StatusController@create');
   });
 });
+*/
 
 Route::group(['middleware' => 'sentineladmin'], function(){
   Route::group(['prefix' => 'amadeus'], function() {

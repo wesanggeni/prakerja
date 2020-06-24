@@ -3,7 +3,14 @@ namespace App\Http\Controllers\Frontend;
 use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller,Sentinel;
-use App\Users;
+use App\User;
+use App\Circle;
+use App\Status;
+use App\Comment;
+use App\CommentReply;
+use App\LikeStatus;
+use App\LikeComment;
+use App\LikeCommentReply;
 use Illuminate\Support\Facades\Input,Validator,Auth;
 //--
 
@@ -15,7 +22,35 @@ class DefaultController extends Controller {
   }
 
   public function index() {
-    return view('frontend/home');
+    if ($user = Sentinel::check()) {
+      
+
+
+
+
+      $userId = $user->id;
+      $data = Status::whereHas('circle', function($queryOne) use($userId) {
+        $queryOne->where('user_id', '=', $userId);
+      })
+      ->with(['user' => function($queryTwo) {
+        $queryTwo->select('id', 'first_name', 'avatar');
+      }])
+      ->with(['comment.user' => function($queryThree) {
+        $queryThree->select('id', 'first_name', 'avatar');
+      }])
+      ->with('comment', 'comment.commentReply')
+      ->with(['comment.commentReply.user' => function($queryFour) {
+        $queryFour->select('id', 'first_name', 'avatar');
+      }])
+      ->paginate();
+
+      $circleRecom = User::get();
+
+      return view('frontend/home', ['data' => $data, 'circleRecom' => $circleRecom]);
+    } else {
+      return view('frontend/home-default');
+    }
+    
   }
 
   public function job() {

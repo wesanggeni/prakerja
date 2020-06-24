@@ -5,11 +5,11 @@ namespace App;
 use App\Http\Controllers\Controller,Sentinel;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model {
-  protected $table = 'status';
+class Comment extends Model {
+  protected $table = 'comment';
 
   protected $appends = [
-    'comment_count',
+    'comment_reply_count',
     'thumb_up_count',
     'thumb_down_count',
     'thumb_up_status',
@@ -23,48 +23,44 @@ class Status extends Model {
   protected $fillable = [
     'user_id',
     'status',
+    'comment',
   ];
 
-  //baris pertama milik relasi, kedua milik tabel disini
-  public function circle(){
-    return $this->belongsTo('App\Circle', 'user_id', 'circle');
+  public function commentReply(){
+    return $this->hasMany('App\CommentReply', 'comment', 'id');
   }
 
   public function user(){
     return $this->belongsTo('App\User', 'user_id', 'id');
   }
 
-  public function comment(){
-    return $this->hasMany('App\Comment', 'status', 'id');
-  }
-
   /* like attribute */
-  public function likeStatus(){
-    return $this->hasMany('App\LikeStatus', 'status', 'id');
+  public function likeComment(){
+    return $this->hasMany('App\LikeComment', 'comment', 'id');
   }
 
   public function thumbUp() {
-      return $this->likeStatus()->where('like_status','=', 1);
+      return $this->likeComment()->where('like_status','=', 1);
   }
 
   public function thumbDown() {
-      return $this->likeStatus()->where('like_status','=', 2);
+      return $this->likeComment()->where('like_status','=', 2);
   }
 
   public function thumbUpStatus() {
-    $user = Sentinel::check();
-      return $this->likeStatus()->where('user_id','=', $user->id)
+  	$user = Sentinel::check();
+      return $this->likeComment()->where('user_id','=', $user->id)
       ->where('like_status','=', 1);
   }
 
   public function thumbDownStatus() {
-    $user = Sentinel::check();
-      return $this->likeStatus()->where('user_id','=', $user->id)
+  	$user = Sentinel::check();
+      return $this->likeComment()->where('user_id','=', $user->id)
       ->where('like_status','=', 2);
   }
 
-  public function getCommentCountAttribute(){
-    return $this->comment()->count();
+  public function getCommentReplyCountAttribute(){
+    return $this->commentReply()->count();
   }
 
   public function getThumbUpCountAttribute(){

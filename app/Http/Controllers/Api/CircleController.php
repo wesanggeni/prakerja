@@ -1,45 +1,37 @@
 <?php
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers\Api;
 use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller,Sentinel;
 use App\User;
-use App\Status;
+use App\Circle;
 use Illuminate\Support\Facades\Input,Validator,Auth;
 //--
 
-class StatusController extends Controller {
+class CircleController extends Controller {
 
-  public function lab() {
-    $user = Auth::user();
-    print_r($user);
-    //return view('frontend/home');
-  }
-
-  public function index() {
-    return view('frontend/home');
-  }
+  public function index() { }
 
   public function create(Request $request) {
     $user = Auth::user();
 
     $validator = Validator::make($request->all(), [
-      'status'  => 'required|string',
+      'dataId'  => 'required|string',
     ]);
 
     if ($validator->fails()) {    
       return response()->json($validator->messages(), 200);
     }
 
-    $status = new Status;
-    $status->user_id = $user->id;
-    $status->status = $request->status;
+    $insertThis           = new Circle;
+    $insertThis->user_id  = $user->id;
+    $insertThis->circle   = $request->dataId;
 
-    if ($status->save()) {
+    if ($insertThis->save()) {
       return response()->json([
         'status'    => true,
         'message'   => null,
-        'data'      => $status,
+        'data'      => null,
       ], 200);
     }
   }

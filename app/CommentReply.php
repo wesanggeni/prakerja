@@ -5,11 +5,10 @@ namespace App;
 use App\Http\Controllers\Controller,Sentinel;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model {
-  protected $table = 'status';
+class CommentReply extends Model {
+  protected $table = 'comment_reply';
 
   protected $appends = [
-    'comment_count',
     'thumb_up_count',
     'thumb_down_count',
     'thumb_up_status',
@@ -22,49 +21,37 @@ class Status extends Model {
 
   protected $fillable = [
     'user_id',
-    'status',
+    'comment',
+    'comment_reply',
   ];
-
-  //baris pertama milik relasi, kedua milik tabel disini
-  public function circle(){
-    return $this->belongsTo('App\Circle', 'user_id', 'circle');
-  }
 
   public function user(){
     return $this->belongsTo('App\User', 'user_id', 'id');
   }
 
-  public function comment(){
-    return $this->hasMany('App\Comment', 'status', 'id');
-  }
-
   /* like attribute */
-  public function likeStatus(){
-    return $this->hasMany('App\LikeStatus', 'status', 'id');
+  public function likeCommentReply(){
+    return $this->hasMany('App\LikeCommentReply', 'comment_reply', 'id');
   }
 
   public function thumbUp() {
-      return $this->likeStatus()->where('like_status','=', 1);
+      return $this->likeCommentReply()->where('like_status','=', 1);
   }
 
   public function thumbDown() {
-      return $this->likeStatus()->where('like_status','=', 2);
+      return $this->likeCommentReply()->where('like_status','=', 2);
   }
 
   public function thumbUpStatus() {
-    $user = Sentinel::check();
-      return $this->likeStatus()->where('user_id','=', $user->id)
+  	$user = Sentinel::check();
+      return $this->likeCommentReply()->where('user_id','=', $user->id)
       ->where('like_status','=', 1);
   }
 
   public function thumbDownStatus() {
-    $user = Sentinel::check();
-      return $this->likeStatus()->where('user_id','=', $user->id)
+  	$user = Sentinel::check();
+      return $this->likeCommentReply()->where('user_id','=', $user->id)
       ->where('like_status','=', 2);
-  }
-
-  public function getCommentCountAttribute(){
-    return $this->comment()->count();
   }
 
   public function getThumbUpCountAttribute(){

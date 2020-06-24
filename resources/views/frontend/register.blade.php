@@ -41,7 +41,7 @@
               <div class="row">
                 <div class="col-md-9 col-lg-8 mx-auto">
                   <h3 class="login-heading mb-4">Selamat Datang!</h3>
-                  <form action="{{url('register-process')}}" method="post">
+                  <form action="{{url('get-register')}}" method="post">
                     @csrf
                     <div class="form-label-group mb-3">
                       <input name="firstname" type="text" class="form-control" placeholder="Nama Depan" required="">

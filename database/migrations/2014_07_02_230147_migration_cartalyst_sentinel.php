@@ -102,11 +102,23 @@ class MigrationCartalystSentinel extends Migration
             $table->string('password');
             $table->string('permissions')->nullable();
             $table->text('avatar')->nullable();
+            $table->text('token')->nullable();
             $table->timestamp('last_login')->nullable();
             $table->timestamps();
 
             $table->engine = 'InnoDB';
             $table->unique('email');
+        });
+
+        Schema::create('circle', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('circle')->unsigned();
+            $table->smallInteger('status')->default(0);
+            $table->timestamps();
+
+            $table->engine = 'InnoDB';
+            $table->index('user_id');
         });
 
         Schema::create('status', function (Blueprint $table) {
@@ -118,15 +130,65 @@ class MigrationCartalystSentinel extends Migration
             $table->engine = 'InnoDB';
             $table->index('user_id');
         });
+
+        Schema::create('comment', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('status')->unsigned();
+            $table->text('comment')->nullable();
+            $table->timestamps();
+
+            $table->engine = 'InnoDB';
+            $table->index('status');
+        });
+
+        Schema::create('comment_reply', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('comment')->unsigned();
+            $table->text('comment_reply')->nullable();
+            $table->timestamps();
+
+            $table->engine = 'InnoDB';
+            $table->index('comment');
+        });
+
+        Schema::create('like_status', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('status')->unsigned();
+            $table->smallInteger('like_status')->default(0);
+            $table->timestamps();
+
+            $table->engine = 'InnoDB';
+            $table->index('status');
+        });
+
+        Schema::create('like_comment', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('comment')->unsigned();
+            $table->smallInteger('like_status')->default(0);
+            $table->timestamps();
+
+            $table->engine = 'InnoDB';
+            $table->index('comment');
+        });
+
+        Schema::create('like_comment_reply', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('comment_reply')->unsigned();
+            $table->smallInteger('like_status')->default(0);
+            $table->timestamps();
+
+            $table->engine = 'InnoDB';
+            $table->index('comment_reply');
+        });
+
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
+    public function down() {
         Schema::drop('activations');
         Schema::drop('persistences');
         Schema::drop('reminders');
@@ -134,6 +196,12 @@ class MigrationCartalystSentinel extends Migration
         Schema::drop('role_users');
         Schema::drop('throttle');
         Schema::drop('users');
+        Schema::drop('circle');
         Schema::drop('status');
+        Schema::drop('comment');
+        Schema::drop('comment_reply');
+        Schema::drop('like_status');
+        Schema::drop('like_comment');
+        Schema::drop('like_comment_reply');
     }
 }

@@ -10,6 +10,10 @@ Route::group(['namespace' => 'Api', 'prefix' => 'auth'], function () {
 	Route::post('login', 'AuthController@login');
 });
 
+Route::group(['namespace' => 'Api', 'prefix' => 'circle', 'middleware' => 'auth:api'], function () {
+	Route::post('create', 'CircleController@create');
+});
+
 Route::group(['namespace' => 'Api', 'prefix' => 'status', 'middleware' => 'auth:api'], function () {
 	Route::post('create', 'StatusController@statusCreate');
 	Route::get('lab', 'StatusController@lab');
