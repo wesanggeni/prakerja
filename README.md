@@ -1,6 +1,6 @@
 ## Media-Sosial Design
 
-'''
+```
 {
     "current_page": 1,
     "data": [
@@ -148,4 +148,4 @@
     "to": 4,
     "total": 4
 }    
-'''
+```
