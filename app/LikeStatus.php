@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LikeStatus extends Model {
   protected $table = 'like_status';
-
+  public $timestamps = false;
   protected $appends = [
     'thumbUpStatus',
   ];

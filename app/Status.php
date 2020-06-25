@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller,Sentinel;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,14 +53,26 @@ class Status extends Model {
   }
 
   public function thumbUpStatus() {
-    $user = Sentinel::check();
-      return $this->likeStatus()->where('user_id','=', $user->id)
+    $userId = null;
+    if (Auth::check()) {
+      $user = Auth::user();
+      $userId = $user->id;
+    } elseif ($user = Sentinel::check()) {
+      $userId = $user->id;
+    }
+      return $this->likeStatus()->where('user_id','=', $userId)
       ->where('like_status','=', 1);
   }
 
   public function thumbDownStatus() {
-    $user = Sentinel::check();
-      return $this->likeStatus()->where('user_id','=', $user->id)
+    $userId = null;
+    if (Auth::check()) {
+      $user = Auth::user();
+      $userId = $user->id;
+    } elseif ($user = Sentinel::check()) {
+      $userId = $user->id;
+    }
+      return $this->likeStatus()->where('user_id','=', $userId)
       ->where('like_status','=', 2);
   }
 

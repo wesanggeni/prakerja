@@ -96,12 +96,15 @@ class MigrationCartalystSentinel extends Migration
 
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('email');
             $table->string('password');
-            $table->string('permissions')->nullable();
-            $table->text('avatar')->nullable();
+            //$table->string('permissions')->nullable();
+            $table->text('avatar_lg')->nullable();
+            $table->text('avatar_md')->nullable();
+            $table->text('avatar_sm')->nullable();
             $table->text('token')->nullable();
             $table->timestamp('last_login')->nullable();
             $table->timestamps();
@@ -158,7 +161,6 @@ class MigrationCartalystSentinel extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('status')->unsigned();
             $table->smallInteger('like_status')->default(0);
-            $table->timestamps();
 
             $table->engine = 'InnoDB';
             $table->index('status');
@@ -169,7 +171,6 @@ class MigrationCartalystSentinel extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('comment')->unsigned();
             $table->smallInteger('like_status')->default(0);
-            $table->timestamps();
 
             $table->engine = 'InnoDB';
             $table->index('comment');
@@ -180,7 +181,6 @@ class MigrationCartalystSentinel extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('comment_reply')->unsigned();
             $table->smallInteger('like_status')->default(0);
-            $table->timestamps();
 
             $table->engine = 'InnoDB';
             $table->index('comment_reply');

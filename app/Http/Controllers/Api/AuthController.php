@@ -48,7 +48,6 @@ class AuthController extends Controller {
         'status'        => true,
         'message'       => null,
         'data'          => $user,
-        'access_token'  => $token,
       ], 200);
 
     } else {
@@ -79,6 +78,7 @@ class AuthController extends Controller {
     $avatar = Avatar::create($request->firstname.' '.$request->lastname)->toBase64();
 
     $creds = [
+      'name'        => ucwords(strtolower($request->firstname)).' '.ucwords(strtolower($request->lastname)),
       'first_name'  => ucwords(strtolower($request->firstname)),
       'last_name'   => ucwords(strtolower($request->lastname)),
       'email'       => $request->email,
@@ -93,6 +93,8 @@ class AuthController extends Controller {
       Sentinel::authenticate($creds);
       $userLogin  = User::find($user->id);
       $token      = $userLogin->createToken('Prakerja Access')->accessToken;
+      $userLogin->token = $token;
+      $userLogin->save();
 
       return response()->json([
         'status'        => true,

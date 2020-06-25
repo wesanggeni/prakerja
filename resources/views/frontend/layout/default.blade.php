@@ -62,8 +62,8 @@
             </li>
             <li class="nav-item dropdown">
               <a href="#" style="margin-right: -0.5rem;" data-toggle="dropdown" class="nav-link dropdown-toggle user-action">
-                <img src="{{$user->avatar}}" class="avatar" alt="Avatar">
-                 {{$user->first_name.' '.$user->last_name}} 
+                <img src="{{$user->avatar_sm}}" class="avatar" alt="Avatar">
+                 {{$user->name}} 
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
@@ -103,10 +103,11 @@
     <!-- Bootstrap core JavaScript
       ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     <script src="../../assets/js/vendor/popper.min.js"></script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
+    <script src="{{url('dist/js/bootstrap.min.js')}}"></script>
     <script src="../../assets/js/vendor/holder.min.js"></script>
+    <script src="{{url('dist/js/textarea.js')}}"></script>
   </body>
 </html>
