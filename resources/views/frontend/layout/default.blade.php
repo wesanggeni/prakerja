@@ -90,16 +90,17 @@
           <?php } ?>
         </div>
     </nav>
-    <main role="main" style="margin-top: 55px;">
+    <main role="main" style="margin-top: 50px;">
       <!-- Content Header (Page header) -->
       @yield('content')
       <!-- /.content -->
     </main>
-    <footer class="footer py-3" style="background-color: #fff; margin-top: 30px; border-top: 1px #eee solid;">
+    <footer class="footer py-3" style="background-color: #fff; margin-top: 30px; border-top: 1px #eee solid; clear:both;">
       <div class="container text-center">
         <span class="text-muted"><a href="">Prakerja.id</a> 2019 Allright Reserved.</span>
       </div>
     </footer>
+
     <!-- Bootstrap core JavaScript
       ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

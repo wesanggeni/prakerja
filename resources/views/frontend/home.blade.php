@@ -4,7 +4,7 @@ Prakerja
 @endsection
 @section('content')
 @if ($user = Sentinel::check())
-<div class="" style="margin-top: 19px;">
+<div class="" style="margin-top: 19px; height: 100% !important;">
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-2 mb-2">
@@ -24,10 +24,8 @@ Prakerja
         </div>
       </div>
 
-
-
       <div class="col-lg-5">
-        <div class="card mb-4">
+        <div class="card mb-c">
           <div class="card-header">
             Buat Postingan
           </div>
@@ -47,43 +45,7 @@ Prakerja
           </div>
         </div>
         <div class="fill-status">
-
-
-
-
-
-
-
-
-
-          <!--
-            <div class="card">
-              <div class="card-body">
-                <pre>
-                <?php
-              /*
-              $json_string = json_encode($data, JSON_PRETTY_PRINT);
-              print_r($json_string);
-              */
-              ?>
-                </pre>
-              </div>
-            </div>
-            -->
-          <!--
-            <?php
-              if (count($data) > 0) {
-              foreach ($data as $key => $value) {
-              ?>
-            <div class="card">
-              <div class="card-body">
-                <?php echo $value->status; ?>
-              </div>
-            </div>
-            <?php
-              } }
-              ?>
-            -->
+          <!-- load status -->
         </div>
       </div>
       <div class="col-lg-3">
@@ -103,29 +65,29 @@ Prakerja
         </div>
       </div>
       <div class="col-lg-2">
-        <div class="list-group">
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small class="text-muted">3 days ago</small>
-            </div>
-            <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-            <small class="text-muted">Donec id elit non mi porta.</small>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">List group item heading</h5>
-              <small class="text-muted">3 days ago</small>
-            </div>
-            <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-            <small class="text-muted">Donec id elit non mi porta.</small>
-          </a>
+
+        <div class="homeright-wrap border">
+          <div class="homeright-item">
+
+  <div class="media p-3">
+    <img src="{{$user->avatar_sm}}" alt="John Doe" class="mr-3 rounded-circle" style="width:30px;">
+    <div class="media-body">
+      <a href="">Setan Alas</a>     
+    </div>
+  </div>
+
+          </div>
         </div>
+
       </div>
+      <!-- end col-2 -->
+
     </div>
   </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+@include('frontend.layout.chat')
+
 <script>
 $(document).ready(function() {
   loadStatus();
@@ -320,15 +282,12 @@ $(document).ready(function() {
             '</div>' +
             '<div class="box-com">' +
             '<div class="comment-area">' +
-            '<p class="status-name">'+
-
+            '<p class="status-name">' +
             '<button class="post-act act-comment">' +
-              '<i class="fa fa-ellipsis-v"></i>' +
-            '</button>'
-
-            + data.data.user.name +
+            '<i class="fa fa-ellipsis-v"></i>' +
+            '</button>' +
+            data.data.user.name +
             '<span class="smt">baru saja</span></p>' +
-
             '<div class="act-line">' +
             '<button data-id="' + data.data.id + '" class="act-up2 post-act">' +
             '<i class="fa fa-thumbs-o-up"></i>' +
@@ -339,13 +298,10 @@ $(document).ready(function() {
             '<span class="tl1">0</span>' +
             '</button>' +
             '</div>' +
-
             '<div class="post-content">' + data.data.comment +
             '</div>' +
             '</div>' +
-
-            '<div data-id="' + data.data.id + '" class="act-reply2 post-act t-comment1 cF"><i class="fa fa-angle-down" aria-hidden="true"></i>0 Balasan</div>'+
-
+            '<div data-id="' + data.data.id + '" class="act-reply2 post-act t-comment1 cF"><i class="fa fa-angle-down" aria-hidden="true"></i>0 Balasan</div>' +
             '<!-- comment reply -->' +
             '<div data-id="' + data.data.id + '" class="show-reply">' +
             '<div class="box-wrap bt">' +
@@ -420,7 +376,6 @@ $(document).ready(function() {
     }
   });
   /* --------------------------- */
-
   $(document).on("click", '.act-reply1', function(event) {
     const attrId = $(this).attr("data-id");
     $(this).toggleClass("act");
@@ -428,93 +383,83 @@ $(document).ready(function() {
       $(this).css('display', 'block');
     });
     /* load comment */
-    
     if ($(this).hasClass('cF')) {
       const data = {
         dataId: attrId,
       };
       fetch('{{url("api/status/get-comment")}}', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer {{$user->token}}'
-        },
-        body: JSON.stringify(data),
-      })
-      .then(response => response.json())
-      .then(data => {
-        //console.log(data.data);
-        if (data.data.data !== 'undefined') {
-          data.data.data.forEach(function(item) {
-          var statusUp = '';
-          var statusDown = '';
-          if (item.thumb_up_status === 1) {
-            statusUp = ' act';
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer {{$user->token}}'
+          },
+          body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+          //console.log(data.data);
+          if (data.data.data !== 'undefined') {
+            data.data.data.forEach(function(item) {
+              var statusUp = '';
+              var statusDown = '';
+              if (item.thumb_up_status === 1) {
+                statusUp = ' act';
+              }
+              if (item.thumb_down_status === 1) {
+                statusDown = ' act';
+              }
+              $('.fill-comment[data-id="' + attrId + '"]').append('<div class="box-wrap">' +
+                '<div class="box-img">' +
+                '<img src="' + item.user.avatar_sm + '" class="st2">' +
+                '</div>' +
+                '<div class="box-com">' +
+                '<div class="comment-area">' +
+                '<p class="status-name">' +
+                '<button class="post-act act-comment">' +
+                '<i class="fa fa-ellipsis-v"></i>' +
+                '</button>' +
+                item.user.name +
+                '<span class="smt">baru saja</span></p>' +
+                '<div class="act-line">' +
+                '<button data-id="' + item.id + '" class="act-up2 post-act' + statusUp + '">' +
+                '<i class="fa fa-thumbs-o-up"></i>' +
+                '<span class="tl1">' + item.thumb_up_count + '</span>' +
+                '</button>' +
+                '<button data-id="' + item.id + '" class="act-down2 post-act' + statusDown + '">' +
+                '<i class="fa fa-thumbs-o-down"></i>' +
+                '<span class="tl1">' + item.thumb_down_count + '</span>' +
+                '</button>' +
+                '</div>' +
+                '<div class="post-content">' + item.comment +
+                '</div>' +
+                '</div>' +
+                '<div data-id="' + item.id + '" class="act-reply2 post-act t-comment1 cF"><i class="fa fa-angle-down" aria-hidden="true"></i>' + item.comment_reply_count + ' Balasan</div>' +
+                '<!-- comment reply -->' +
+                '<div data-id="' + item.id + '" class="show-reply">' +
+                '<div class="box-wrap">' +
+                '<div class="box-img-sub">' +
+                '<img src="' + item.user.avatar_sm + '" class="st2">' +
+                '</div>' +
+                '<div class="box-com-sub">' +
+                '<textarea data-id="' + item.id + '" class="act-write2 form-control textarea-autosize" rows="1" placeholder="Tulis balasan"></textarea>' +
+                '</div>' +
+                '</div>' +
+                '<div data-id="' + item.id + '" class="fill-reply">' +
+                '<!-- content reply -->' +
+                '</div>' +
+                '</div>' +
+                '<!-- end comment reply -->' +
+                '</div>' +
+                '</div>');
+            });
           }
-          if (item.thumb_down_status === 1) {
-            statusDown = ' act';
-          }
-            $('.fill-comment[data-id="' + attrId + '"]').append('<div class="box-wrap">' +
-              '<div class="box-img">' +
-              '<img src="' + item.user.avatar_sm + '" class="st2">' +
-              '</div>' +
-              '<div class="box-com">' +
-              '<div class="comment-area">' +
-              '<p class="status-name">'+
-
-              '<button class="post-act act-comment">' +
-              '<i class="fa fa-ellipsis-v"></i>' +
-              '</button>'
-
-               + item.user.name +
-              '<span class="smt">baru saja</span></p>' +
-
-              '<div class="act-line">' +
-              '<button data-id="' + item.id + '" class="act-up2 post-act'+statusUp+'">' +
-              '<i class="fa fa-thumbs-o-up"></i>' +
-              '<span class="tl1">' + item.thumb_up_count + '</span>' +
-              '</button>' +
-              '<button data-id="' + item.id + '" class="act-down2 post-act'+statusDown+'">' +
-              '<i class="fa fa-thumbs-o-down"></i>' +
-              '<span class="tl1">' + item.thumb_down_count + '</span>' +
-              '</button>' +
-              '</div>' +
-
-              '<div class="post-content">' + item.comment +
-              '</div>' +
-
-              '</div>' +
-
-              '<div data-id="' + item.id + '" class="act-reply2 post-act t-comment1 cF"><i class="fa fa-angle-down" aria-hidden="true"></i>' + item.comment_reply_count + ' Balasan</div>'+
-
-              '<!-- comment reply -->' +
-              '<div data-id="' + item.id + '" class="show-reply">' +
-              '<div class="box-wrap">' +
-              '<div class="box-img-sub">' +
-              '<img src="' + item.user.avatar_sm + '" class="st2">' +
-              '</div>' +
-              '<div class="box-com-sub">' +
-              '<textarea data-id="' + item.id + '" class="act-write2 form-control textarea-autosize" rows="1" placeholder="Tulis balasan"></textarea>' +
-              '</div>' +
-              '</div>' +
-              '<div data-id="' + item.id + '" class="fill-reply">' +
-              '<!-- content reply -->' +
-              '</div>' +
-              '</div>' +
-
-              '<!-- end comment reply -->' +
-              '</div>' +
-              '</div>');
-          });
-        }
-      })
-      .catch((error) => {
-        //console.error(error);
-      });
+        })
+        .catch((error) => {
+          //console.error(error);
+        });
     }
     $(this).removeClass('cF');
   });
-
   $(document).on("click", '.act-reply2', function(event) {
     $(this).toggleClass("act");
     $('.show-reply[data-id="' + $(this).attr("data-id") + '"]').toggle(function() {
@@ -527,65 +472,60 @@ $(document).ready(function() {
         dataId: attrId,
       };
       fetch('{{url("api/status/get-reply")}}', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer {{$user->token}}'
-        },
-        body: JSON.stringify(data),
-      })
-      .then(response => response.json())
-      .then(data => {
-        //console.log(data.data);
-        if (data.data.data !== 'undefined') {
-          data.data.data.forEach(function(item) {
-          var statusUp = '';
-          var statusDown = '';
-          if (item.thumb_up_status === 1) {
-            statusUp = ' act';
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer {{$user->token}}'
+          },
+          body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+          //console.log(data.data);
+          if (data.data.data !== 'undefined') {
+            data.data.data.forEach(function(item) {
+              var statusUp = '';
+              var statusDown = '';
+              if (item.thumb_up_status === 1) {
+                statusUp = ' act';
+              }
+              if (item.thumb_down_status === 1) {
+                statusDown = ' act';
+              }
+              $('.fill-reply[data-id="' + attrId + '"]').append('<div class="box-wrap">' +
+                '<div class="box-img-sub">' +
+                '<img src="' + item.user.avatar_sm + '" class="st2">' +
+                '</div>' +
+                '<div class="box-com-sub">' +
+                '<div class="comment-area">' +
+                '<p class="status-name">' +
+                '<button class="post-act act-reply">' +
+                '<i class="fa fa-ellipsis-v"></i>' +
+                '</button>' +
+                item.user.name +
+                '<span class="smt">6 menit lalu</span>' +
+                '</p>' +
+                '<div class="act-line">' +
+                '<button data-id="' + item.id + '" class="act-up3 post-act' + statusUp + '">' +
+                '<i class="fa fa-thumbs-o-up"></i>' +
+                '<span class="tl1">' + item.thumb_up_count + '</span>' +
+                '</button>' +
+                '<button data-id="' + item.id + '" class="act-down3 post-act' + statusDown + '">' +
+                '<i class="fa fa-thumbs-o-down"></i>' +
+                '<span class="tl1">' + item.thumb_down_count + '</span>' +
+                '</button>' +
+                '</div>' +
+                '<div class="post-content">' + item.comment_reply +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>');
+            });
           }
-          if (item.thumb_down_status === 1) {
-            statusDown = ' act';
-          }
-            $('.fill-reply[data-id="' + attrId + '"]').append('<div class="box-wrap">' +
-              '<div class="box-img-sub">' +
-              '<img src="' + item.user.avatar_sm + '" class="st2">' +
-              '</div>' +
-              '<div class="box-com-sub">' +
-              '<div class="comment-area">' +
-              '<p class="status-name">'+
-
-              '<button class="post-act act-reply">' +
-              '<i class="fa fa-ellipsis-v"></i>' +
-              '</button>'
-
-               + item.user.name +
-              '<span class="smt">6 menit lalu</span>' +
-              '</p>' +
-
-              '<div class="act-line">' +
-              '<button data-id="' + item.id + '" class="act-up3 post-act'+statusUp+'">' +
-              '<i class="fa fa-thumbs-o-up"></i>' +
-              '<span class="tl1">' + item.thumb_up_count + '</span>' +
-              '</button>' +
-              '<button data-id="' + item.id + '" class="act-down3 post-act'+statusDown+'">' +
-              '<i class="fa fa-thumbs-o-down"></i>' +
-              '<span class="tl1">' + item.thumb_down_count + '</span>' +
-              '</button>' +
-              '</div>' +
-
-              '<div class="post-content">' + item.comment_reply +
-              '</div>' +
-              '</div>' +
-
-              '</div>' +
-              '</div>');
-          });
-        }
-      })
-      .catch((error) => {
-        //console.error(error);
-      });
+        })
+        .catch((error) => {
+          //console.error(error);
+        });
     }
     $(this).removeClass('cF');
   });
@@ -610,24 +550,20 @@ $(document).ready(function() {
           if (value.thumb_down_status === 1) {
             statusDown = ' act';
           }
-          //$(".status-fill").prepend('<div class="card mb-2">'+
           $(".fill-status").prepend('<div data-id="' + value.id + '" class="post-item">' +
             '<div class="post-body">' +
             '<!-- status coloumn -->' +
             '<div class="media">' +
             '<img src="' + value.user.avatar_sm + '" class="st1">' +
             '<div class="media-body">' +
-            '<p class="status-name">'+
-
+            '<p class="status-name">' +
             '<button class="post-act act-post">' +
             '<i class="fa fa-ellipsis-v"></i>' +
-            '</button>'
-
-            + value.user.name + 
+            '</button>' +
+            value.user.name +
             '</p>' +
             '<p class="status-time">6 menit lalu</p>' +
             '</div>' +
-
             '<div class="act-line row bdt">' +
             '<button data-id="' + value.id + '" class="act-up1 post-act' + statusUp + '">' +
             '<i class="fa fa-thumbs-o-up"></i>' +
@@ -637,15 +573,13 @@ $(document).ready(function() {
             '<i class="fa fa-thumbs-o-down"></i>' +
             '<span class="tl1">' + value.thumb_down_count + '</span>' +
             '</button>' +
-
             '</div>' +
             '</div>' +
             '<div class="status-box">' +
             value.status +
             '</div>' +
-            '<div data-id="' + value.id + '" class="act-reply1 post-act t-comment cF"><i class="fa fa-angle-down" aria-hidden="true"></i>' + value.comment_count + ' Balasan</div>'+
+            '<div data-id="' + value.id + '" class="act-reply1 post-act t-comment cF"><i class="fa fa-angle-down" aria-hidden="true"></i>' + value.comment_count + ' Balasan</div>' +
             '<!-- end status coloumn -->' +
-
             '<!-- comment box -->' +
             '<div data-id="' + value.id + '" class="show-comment">' +
             '<div class="box-wrap bt">' +
@@ -689,13 +623,11 @@ $(document).ready(function() {
           '<div class="media">' +
           '<img src="' + data.data.user.avatar_sm + '" class="st1">' +
           '<div class="media-body">' +
-          '<p class="status-name">'+
-          
+          '<p class="status-name">' +
           '<button class="post-act act-post">' +
-            '<i class="fa fa-ellipsis-v"></i>' +
-          '</button>'
-
-           + data.data.user.name + '</p>' +
+          '<i class="fa fa-ellipsis-v"></i>' +
+          '</button>' +
+          data.data.user.name + '</p>' +
           '<p class="status-time">baru saja</p>' +
           '</div>' +
           '<div class="act-line row bdt">' +
@@ -707,15 +639,12 @@ $(document).ready(function() {
           '<i class="fa fa-thumbs-o-down"></i>' +
           '<span class="tl1">0</span>' +
           '</button>' +
-
           '</div>' +
           '</div>' +
           '<div class="status-box">' +
           data.data.status +
           '</div>' +
-
-          '<div data-id="' + data.data.id + '" class="act-reply1 post-act t-comment cF"><i class="fa fa-angle-down" aria-hidden="true"></i>0 Balasan</div>'+
-
+          '<div data-id="' + data.data.id + '" class="act-reply1 post-act t-comment cF"><i class="fa fa-angle-down" aria-hidden="true"></i>0 Balasan</div>' +
           '<!-- end status coloumn -->' +
           '<!-- comment box -->' +
           '<div data-id="' + data.data.id + '" class="show-comment">' +
